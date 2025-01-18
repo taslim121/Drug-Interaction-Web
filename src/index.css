@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrolling */
+  position: relative;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%; /* Adjust to fit smaller screens */
+  max-width: 500px; /* Set a max-width for larger screens */
+  background-color: rgba(0, 0, 0, 0.6); /* Slightly darker for better readability */
+  border-radius: 10px;
+  padding: 15px; /* Slightly reduce padding for smaller screens */
+  text-align: center;
+  color: white;
+  z-index: 2;
+  min-height: 120px; /* Adjust minimum height for smaller screens */
+  max-height: 220px; /* Adjust max height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Ensure text stacks properly */
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.facts-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  word-wrap: break-word; /* Ensure long text breaks within the box */
+}
+
+.fact-item {
+  font-size: 16px; /* Reduce font size for smaller screens */
+  color: #ffffff;
+  transition: opacity 1s ease-in-out;
+  opacity: 0;
+  line-height: 1.4; /* Adjust line height for readability */
+}
+
+.fact-item.fade-in {
+  opacity: 1;
+}
+
+.fact-item.fade-out {
+  opacity: 0;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 12vh;
+  background-color: transparent;
+  z-index: 10;
+  border-bottom: 1px solid gray;
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    width: 85%;
+    min-height: 100px;
+    max-height: 180px;
+    padding: 10px;
+  }
+
+  .fact-item {
+    font-size: 14px; /* Smaller text for small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .overlay {
+    width: 95%;
+    min-height: 90px;
+    max-height: 160px;
+    padding: 8px;
+  }
+
+  .fact-item {
+    font-size: 12px; /* Adjust for very small screens */
+  }
+}
