@@ -16,7 +16,7 @@ function Header() {
         <button
           className="elegant-button relative text-black border-b border-black px-3 py-2 text-sm font-medium transition-transform duration-400 transform hover:scale-95"
         >
-          <Link to="/Auth">Sign In As HealthCare Professional</Link>
+          <Link to="/Auth">Sign In as HCP</Link>
         </button>
 
         

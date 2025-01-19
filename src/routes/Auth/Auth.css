@@ -41,7 +41,7 @@
       display: flex; /* Center content vertically */
       justify-content: center;
       align-items: center;
-      margin:20px;
+      margin:10px;
     }
     .formbox{
       width: 100%;
@@ -54,13 +54,13 @@
     }
     .toggel-box::before{
       left: 0;
-      top:-270%;
+      top:-275%;
       width: 100%;
       height: 300%;
     }
     .active .toggel-box::before{
       left: 0;
-      top:70%;
+      top:75%;
   
   }
     .tg{
@@ -86,10 +86,14 @@
   @media screen and (max-width: 400px) {
   
     .font-fit{
-      font-size: 25px;
+      font-size: 20px;
     }
     .input-box{
-      @apply text-[14px] ;
+      @apply text-[14px] py-[10px] pl-[15px] pr-[27px] ;
+    }
+    .tg{
+      width: 100%;
+      height: 25%;
     }
     
   }
