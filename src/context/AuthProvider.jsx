@@ -2,15 +2,16 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import supabase from '../Supabse/supabse.js'; 
 
 const AuthContext = createContext();
-
 export default function AuthProvider({ children }) {
   const [authState, setAuthState] = useState({
     session: null,
     loading: true,
     user: null,
     isAdmin: false,
+   
     isHcp: false,
     resetPending: false,
+    setResetPending: () => {},
   });
 
   const setResetPending = (value) => {
@@ -38,6 +39,7 @@ export default function AuthProvider({ children }) {
     fetchSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+
       if (session) {
         fetchUserProfile(session.user.id, session);
       } else {
@@ -47,7 +49,8 @@ export default function AuthProvider({ children }) {
           user: null,
           isAdmin: false,
           isHcp: false,
-          resetPending: false,
+          resetPending: false, 
+          setResetPending,
         }));
       }
     });
@@ -57,16 +60,12 @@ export default function AuthProvider({ children }) {
     };
   }, [authState.resetPending]);
 
-  const fetchUserProfile = async (userId, session = authState.session) => {
+  async function fetchUserProfile(userId, session = authState.session) {
     if (authState.resetPending) return; // Stop fetching profile if resetPending is true
 
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
+      
       if (error) {
         console.error('Error fetching user profile:', error);
         return;
@@ -79,23 +78,17 @@ export default function AuthProvider({ children }) {
         user: data,
         isAdmin: data.role === 'admin',
         isHcp: data.role === 'hcp',
-        resetPending: false,
+        resetPending : false
       }));
     } catch (err) {
       console.error('Unexpected error fetching user profile:', err);
     }
-  };
+  }
 
-  return (
-    <AuthContext.Provider
-      value={{
-        ...authState,
-        setResetPending,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+ 
+
+
+  return <AuthContext.Provider value={{ ...authState}}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {
@@ -105,5 +98,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-
