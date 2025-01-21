@@ -1,17 +1,17 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import supabase from '../Supabse/supabse.js'; 
+import supabase from '../Supabse/supabse';
 
-const AuthContext = createContext();
+// Types for AuthContext
+const AuthContext = createContext(undefined);
+
 export default function AuthProvider({ children }) {
   const [authState, setAuthState] = useState({
-    session: null,
+    session: null, // Session from Supabase
     loading: true,
     user: null,
     isAdmin: false,
-   
     isHcp: false,
     resetPending: false,
-    setResetPending: () => {},
   });
 
   const setResetPending = (value) => {
@@ -19,7 +19,7 @@ export default function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    if (authState.resetPending) return; // Stop fetching session if resetPending is true
+    if (authState.resetPending) return;
 
     const fetchSession = async () => {
       const { data: { session }, error } = await supabase.auth.getSession();
@@ -39,7 +39,6 @@ export default function AuthProvider({ children }) {
     fetchSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-
       if (session) {
         fetchUserProfile(session.user.id, session);
       } else {
@@ -49,8 +48,7 @@ export default function AuthProvider({ children }) {
           user: null,
           isAdmin: false,
           isHcp: false,
-          resetPending: false, 
-          setResetPending,
+          resetPending: false,
         }));
       }
     });
@@ -60,12 +58,11 @@ export default function AuthProvider({ children }) {
     };
   }, [authState.resetPending]);
 
-  async function fetchUserProfile(userId, session = authState.session) {
-    if (authState.resetPending) return; // Stop fetching profile if resetPending is true
+  const fetchUserProfile = async (userId, session = authState.session) => {
+    if (authState.resetPending) return;
 
     try {
       const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
-      
       if (error) {
         console.error('Error fetching user profile:', error);
         return;
@@ -78,17 +75,27 @@ export default function AuthProvider({ children }) {
         user: data,
         isAdmin: data.role === 'admin',
         isHcp: data.role === 'hcp',
-        resetPending : false
       }));
     } catch (err) {
       console.error('Unexpected error fetching user profile:', err);
     }
-  }
+  };
 
- 
-
-
-  return <AuthContext.Provider value={{ ...authState}}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        session: authState.session,
+        loading: authState.loading,
+        user: authState.user,
+        isAdmin: authState.isAdmin,
+        isHcp: authState.isHcp,
+        resetPending: authState.resetPending,
+        setResetPending,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export const useAuth = () => {

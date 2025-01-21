@@ -4,7 +4,7 @@ import { FaUser, FaLock, FaEnvelope } from 'react-icons/fa';
 import supabase from '../../Supabse/supabse'; // Update with the correct path to your supabase.js
 
 import QualificationModal from '../../components/Qualification';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 function AuthLayout() {
   const [isActive, setIsActive] = useState(false);

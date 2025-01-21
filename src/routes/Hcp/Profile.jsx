@@ -1,9 +1,11 @@
 import React from 'react';
 import { useAuth } from "../../context/AuthProvider";
 import supabase from '../../Supabse/supabse';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Profile = () => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   let qualificationData = null;
   try {
@@ -58,7 +60,12 @@ const Profile = () => {
 
       {/* Sign Out Button */}
       <button
-        onClick={() => supabase.auth.signOut()}
+        onClick={() => {
+          supabase.auth.signOut().then(() => {
+            queryClient.invalidateQueries(["session"]); // Clear cached session data
+          });
+        }}
+        
         className="w-1/2 mt-6 flex items-center justify-center self-center mx-auto px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-lg hover:bg-blue-600"
       >
         Sign out
