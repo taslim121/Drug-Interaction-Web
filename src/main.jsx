@@ -10,6 +10,8 @@ import AuthProvider from './context/AuthProvider.jsx';
 import PrivateRoute from './routes/Auth/PrivateRoute.jsx';
 import Profile from './routes/Hcp/Profile.jsx';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import General from './routes/Patient/General_Instruction.jsx';
+import Instruction from './routes/Patient/instructions.jsx';
 
 const queryClient = new QueryClient();
 
@@ -17,6 +19,9 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="/auth" element={<AuthLayout />} />
+      <Route path="/general" element={<General />} />
+      <Route path="/general/:id" element={<Instruction />} />
+      
       <Route index={true} path="/" element={<Home />} />
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />

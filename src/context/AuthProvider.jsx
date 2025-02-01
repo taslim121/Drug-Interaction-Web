@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import supabase from '../Supabse/supabse';
+import supabase from '../Supabase/supabase';
 
 // Types for AuthContext
 const AuthContext = createContext(undefined);
